@@ -1,7 +1,8 @@
 import os, psycopg
-from flask import g
+from flask import g, render_template, Flask
 from psycopg.rows import dict_row
 
+app = Flask(__name__)
 
 # This class helps us interact with the database.
 # It wraps the underlying psycopg library that we are using.
@@ -9,9 +10,14 @@ from psycopg.rows import dict_row
 # If the below seems too complex right now, that's OK.
 # That's why we have provided it!
 class DatabaseConnection:
-    # VVV CHANGE BOTH OF THESE VVV
-    DEV_DATABASE_NAME = "web_app_html_db"
-    TEST_DATABASE_NAME = "web_app_html_test_db"
+
+
+    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+    
+    DEV_DATABASE_NAME = "chitter"
+    TEST_DATABASE_NAME = "chitter_test"
 
     def __init__(self, test_mode=False):
         self.test_mode = test_mode
@@ -70,7 +76,7 @@ class DatabaseConnection:
 
 # This function integrates with Flask to create one database connection that
 # Flask request can use. To see how to use it, look at example_routes.py
-def get_flask_database_connection(app):
+def get_flask_database_connection():
     if not hasattr(g, 'flask_database_connection'):
         g.flask_database_connection = DatabaseConnection(
             test_mode=os.getenv('APP_ENV') == 'test')
